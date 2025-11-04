@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const AuthContext = createContext();
 const API_BASE_URL='https://slotswapper-api.onrender.com';
-const API_URL = `${API_BASE_URL}/api/auth`; // Ensure this matches backend
+const API_URL = API_BASE_URL`/api/auth`; // Ensure this matches backend
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);

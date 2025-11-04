@@ -2,8 +2,8 @@
 
 import axios from 'axios';
 const API_BASE_URL = 'https://slotswapper-api.onrender.com';
-const API_URL = '${API_BASE_URL}/api/events';
-const SWAP_API_URL = '${API_BASE_URL}/api/swap';
+const API_URL = API_BASE_URL+'/api/events';
+const SWAP_API_URL = API_BASE_URL+'/api/swap';
 
 // EVENT CRUD
 export const createEvent = async (eventData) => {
