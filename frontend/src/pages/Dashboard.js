@@ -1,6 +1,6 @@
 // frontend/src/pages/Dashboard.js (FINAL, COMPLETE CODE)
 
-import React, { useState, useEffect } from 'react.js';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getMyEvents, createEvent, updateEvent } from '../api/eventsApi';
 import { Link } from 'react-router-dom';
