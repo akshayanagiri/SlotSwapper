@@ -20,7 +20,15 @@ const Dashboard = () => {
       const res = await getMyEvents();
       setEvents(res.data);
     } catch (err) {
-      console.error('Error fetching events:', err);
+      // CRITICAL: Log the detailed error response
+      console.error('Error fetching events:', err.response || err); 
+      
+      // Optionally provide user feedback on the blank screen (if events state remains empty)
+      alert("Failed to load your schedule. Check API link or network status."); 
+      
+      // Set events to empty array to ensure the UI doesn't crash on null/undefined data
+      setEvents([]); 
+      
     } finally {
       setLoading(false);
     }

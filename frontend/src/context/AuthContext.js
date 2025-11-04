@@ -12,7 +12,8 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+ useEffect(() => {
+    // If a token exists in localStorage, it must be set in the axios header immediately
     if (token) {
       axios.defaults.headers.common['x-auth-token'] = token;
     }
