@@ -1,6 +1,6 @@
-// frontend/src/pages/Dashboard.js (FINAL, STREAMLINED CODE)
+// frontend/src/pages/Dashboard.js (FINAL, COMPLETE CODE)
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react.js';
 import { useAuth } from '../context/AuthContext';
 import { getMyEvents, createEvent, updateEvent } from '../api/eventsApi';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({ title: '', startTime: '', endTime: '' });
 
-  
   // ----------------------------------------------------
   // DATA FETCHING LOGIC
   // ----------------------------------------------------
@@ -20,12 +19,11 @@ const Dashboard = () => {
     try {
       setLoading(true);
       const res = await getMyEvents();
-      // Safely ensure data is an array before setting state
       const eventsData = Array.isArray(res.data) ? res.data : [];
       setEvents(eventsData);
     } catch (err) {
       console.error('Error fetching events:', err.response || err); 
-      setEvents([]); // Prevent crash on failure
+      setEvents([]);
     } finally {
       setLoading(false);
     }
@@ -43,10 +41,33 @@ const Dashboard = () => {
   }, [isAuthLoading, user]); 
 
   // ----------------------------------------------------
-  // HANDLERS (Unchanged)
+  // HANDLERS (IMPLEMENTATION ADDED)
   // ----------------------------------------------------
-  const handleCreate = async (e) => { /* ... unchanged ... */ };
-  const handleMakeSwappable = async (eventId) => { /* ... unchanged ... */ };
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    try {
+      // 1. Call API to create event
+      await createEvent(formData);
+      // 2. Clear form and refresh list
+      setFormData({ title: '', startTime: '', endTime: '' });
+      fetchEvents(); 
+    } catch (err) {
+      console.error('Error creating event:', err);
+      alert("Failed to add slot. Check dates or API response.");
+    }
+  };
+
+  const handleMakeSwappable = async (eventId) => {
+    try {
+      // 1. Call API to update status
+      await updateEvent(eventId, { status: 'SWAPPABLE' });
+      // 2. Refresh list
+      fetchEvents(); 
+    } catch (err) {
+      console.error('Error marking event swappable:', err);
+      alert("Failed to make slot swappable.");
+    }
+  };
 
   // ----------------------------------------------------
   // CONDITIONAL RENDERING (UI)
@@ -64,7 +85,6 @@ const Dashboard = () => {
 
     return (
       <ul>
-        {/* CRITICAL FIX APPLIED HERE: Use optional chaining to safely map */}
         {events?.map(event => ( 
           <li key={event._id}>
             <div>
@@ -99,7 +119,7 @@ const Dashboard = () => {
       </p>
       
       <h3>Create New Slot</h3>
-      <form onSubmit={handleCreate} className="slot-form">
+      <form onSubmit={handleCreate} className="slot-form"> {/* Calls handleCreate */}
         <div className="input-group"><input name="title" placeholder="Title (e.g., Free Time)" onChange={e => setFormData({...formData, title: e.target.value})} value={formData.title} required /></div>
         <div className="input-group"><input type="datetime-local" name="startTime" onChange={e => setFormData({...formData, startTime: e.target.value})} value={formData.startTime} required /></div>
         <div className="input-group"><input type="datetime-local" name="endTime" onChange={e => setFormData({...formData, endTime: e.target.value})} value={formData.endTime} required /></div>
