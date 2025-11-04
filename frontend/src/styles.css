@@ -1,0 +1,129 @@
+/* frontend/src/styles.css */
+
+/* --- Global Reset & Typography --- */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc; /* Light, soft background */
+    color: #333;
+    line-height: 1.6;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+h1, h2, h3 {
+    color: #004d99; /* Darker blue for headings */
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    margin-top: 20px;
+}
+
+/* --- Card/Container Styles --- */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 30px;
+}
+
+/* --- Input & Form Styles --- */
+.input-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="datetime-local"], 
+.slot-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* --- Button Styles --- */
+.primary-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.primary-btn:hover {
+    background-color: #0056b3;
+}
+
+.danger-btn {
+    background-color: #dc3545;
+}
+
+.danger-btn:hover {
+    background-color: #c82333;
+}
+
+.success-btn {
+    background-color: #28a745;
+}
+
+.success-btn:hover {
+    background-color: #218838;
+}
+
+/* --- Status Indicators --- */
+.status-busy {
+    color: #6c757d; /* Grey */
+    font-weight: bold;
+}
+.status-swappable {
+    color: #17a2b8; /* Cyan/Info color */
+    font-weight: bold;
+}
+.status-pending {
+    color: #ffc107; /* Yellow/Warning color */
+    font-weight: bold;
+}
+.error-msg {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/* List Styling */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #fdfdfd;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+li:last-child {
+    border-bottom: none;
+}
