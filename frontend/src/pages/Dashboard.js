@@ -1,4 +1,4 @@
-// frontend/src/pages/Dashboard.js
+// frontend/src/pages/Dashboard.js (FINAL, STREAMLINED CODE)
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -6,8 +6,7 @@ import { getMyEvents, createEvent, updateEvent } from '../api/eventsApi';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  // Destructure user, logout, and the critical loading state from context
-  const { user, logout, isLoading: isAuthLoading } = useAuth();
+  const { user, logout, isLoading: isAuthLoading } = useAuth(); 
   
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,14 +19,12 @@ const Dashboard = () => {
     try {
       setLoading(true);
       const res = await getMyEvents();
-      // Ensure the API returns an array, otherwise default to empty array
+      // Safely ensure data is an array before setting state
       const eventsData = Array.isArray(res.data) ? res.data : [];
       setEvents(eventsData);
     } catch (err) {
       console.error('Error fetching events:', err.response || err); 
-      // This alert can be annoying, let's remove it for smoother UX 
-      // alert("Failed to load your schedule. Check API link or network status.");
-      setEvents([]); // Ensure state is always an array on failure
+      setEvents([]); // Prevent crash on failure
     } finally {
       setLoading(false);
     }
@@ -37,16 +34,15 @@ const Dashboard = () => {
   // LIFECYCLE: FETCH DATA ONLY AFTER AUTH IS READY
   // ----------------------------------------------------
   useEffect(() => {
-    // CRITICAL: Only fetch events if the AUTHENTICATION context is finished loading
-    // and the user is confirmed to exist (token is present).
+    // Only fetch events if authentication context has finished loading AND we have a user
     if (!isAuthLoading && user) {
         fetchEvents();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthLoading, user]); // Dependency on auth state
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthLoading, user]); 
 
   // ----------------------------------------------------
-  // EVENT HANDLERS
+  // HANDLERS (Unchanged)
   // ----------------------------------------------------
   const handleCreate = async (e) => { /* ... unchanged ... */ };
   const handleMakeSwappable = async (eventId) => { /* ... unchanged ... */ };
@@ -56,13 +52,41 @@ const Dashboard = () => {
   // ----------------------------------------------------
   if (isAuthLoading || loading) {
       return (
-          <div className="card" style={{textAlign: 'center'}}>
+          <div className="card" style={{textAlign: 'center', marginTop: '100px'}}>
               <h1>{isAuthLoading ? "Verifying Session..." : "Loading Schedule..."}</h1>
           </div>
       );
   }
   
-  const renderEvents = () => { /* ... unchanged ... */ };
+  const renderEvents = () => {
+    if (events.length === 0) return <p>You have no slots. Create one below!</p>;
+
+    return (
+      <ul>
+        {/* CRITICAL FIX APPLIED HERE: Use optional chaining to safely map */}
+        {events?.map(event => ( 
+          <li key={event._id}>
+            <div>
+              <strong>{event.title}</strong> ({new Date(event.startTime).toLocaleDateString()} {new Date(event.startTime).toLocaleTimeString()} - {new Date(event.endTime).toLocaleTimeString()}) - Status: 
+              <span className={`status-${event.status.toLowerCase().replace('_', '-')}`} style={{ marginLeft: '5px' }}>
+                {event.status}
+              </span>
+            </div>
+            <div>
+              {event.status === 'BUSY' && (
+                <button onClick={() => handleMakeSwappable(event._id)} className="primary-btn">
+                  Make SWAPPABLE
+                </button>
+              )}
+              {event.status === 'SWAP_PENDING' && (
+                <span className="status-pending" style={{marginLeft: '10px'}}>Awaiting Response</span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   return (
     <div className="card">
