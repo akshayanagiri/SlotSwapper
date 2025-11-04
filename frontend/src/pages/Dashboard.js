@@ -6,7 +6,7 @@ import { getMyEvents, createEvent, updateEvent } from '../api/eventsApi';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading: isAuthLoading} = useAuth();
   // We know these setters are used inside fetchEvents, so we disable the linter warning
   // eslint-disable-next-line no-unused-vars
   const [events, setEvents] = useState([]);
@@ -49,7 +49,24 @@ const Dashboard = () => {
       console.error('Error marking event swappable:', err);
     }
   };
+useEffect(() => {
+    // CRITICAL: Only fetch events if the AUTHENTICATION context is finished loading
+    if (!isAuthLoading) {
+        fetchEvents();
+    }
+  }, [isAuthLoading]); // <--- Rerun only when auth state changes
 
+  // ----------------------------------------------------
+  // --- CONDITIONAL RENDERING ---
+  // ----------------------------------------------------
+  // If the authentication check is still loading, show a loading screen first.
+  if (isAuthLoading) {
+      return (
+          <div style={{textAlign: 'center', marginTop: '100px'}}>
+              <h1>Loading Session...</h1>
+          </div>
+      );
+  }
   const renderEvents = () => {
     if (loading) return <p>Loading your schedule...</p>;
     if (events.length === 0) return <p>You have no slots. Create one below!</p>;
