@@ -26,6 +26,7 @@ const Signup = () => {
   return (
     <div className="card">
       <h2>User Sign Up</h2>
+      <h4>Please wait for a while after signup or login since backend takes some time connect...</h4>
       <form onSubmit={onSubmit} className="auth-form">
         <div className="input-group">
           <input 
